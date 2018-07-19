@@ -357,6 +357,10 @@ defmodule KafkaEx.Server do
         response = case data do
                      nil ->
                        Logger.log(:error, "Unable to fetch metadata from any brokers.  Timeout is #{sync_timeout}.")
+
+                       # Pause before raising error to avoid reaching Maximum Restart Intensity quickly which can cause the entire application to shutdown.
+                       Process.sleep(Application.get_env(:kafka_ex, :pause_before_crash_msec, 0))
+
                        raise "Unable to fetch metadata from any brokers.  Timeout is #{sync_timeout}."
                        :no_metadata_available
                      data ->

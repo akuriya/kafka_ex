@@ -44,6 +44,10 @@ config :kafka_ex,
   # include only major.minor.patch versions.  must be at least 0.8.0
   kafka_version: "0.9.0"
 
+  # Interval before crashing caused by failing to connect to brokers.
+  # Set longer value to avoid reaching Maximum Restart Intensity quickly.
+  pause_before_crash_msec: 1000
+
 env_config = Path.expand("#{Mix.env}.exs", __DIR__)
 if File.exists?(env_config) do
   import_config(env_config)
